@@ -29,7 +29,12 @@ async function sendSensorData() {
             temp: getRandom(device.minTemp, device.maxTemp), // Random temp in range
             hum: getRandom(40, 70)                           // Random humidity
         };
-
+// 🚨 TEMPORARY TEST LOGIC 🚨
+        if (device.name === 'Server Room') {
+            // Force humidity high for this room to trigger the alert
+            payload.hum = 95; // Must be higher than hum_threshold in DB
+            console.log(`[TEST MODE] Forcing ${device.name} Humidity to ${payload.hum}%`);
+        }
         try {
             // Send POST request (Simulates the hardware)
             await axios.post(API_URL, payload, {
@@ -45,3 +50,4 @@ async function sendSensorData() {
 // Run immediately, then repeat every 5 seconds
 sendSensorData();
 setInterval(sendSensorData, 1000000);
+
